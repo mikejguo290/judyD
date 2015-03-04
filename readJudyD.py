@@ -32,6 +32,12 @@ class businessRecord(object):
         self.Broker2= None
         self.Broker3= None
         self.Broker4= None
+        self.UnumCustomer = None
+        self.UnumVBBroker = None
+        self.UnumGrpBroker = None
+        self.UnumIDIBroker = None
+        self.UnumILTCBroker = None
+        self.UnumGLTCBroker = None
     def unumPortfolio(self):
         unumProdsList = [self.VB, self.GRP, self.LTD, self.STD, self.Life, self.ADD, self.IDI, self.ILTC, self.GLTC]
         self.UnumProds = unumProdsList
@@ -85,6 +91,13 @@ for index, row in readAllComp('Test Tab').iterrows():#
     a.Broker2= row ['Broker#2']
     a.Broker3= row ['Broker#3']
     a.Broker4= row ['Broker#4']
+    a.UnumCustomer = row["Unum_Customer"]
+    a.UnumVBBroker = row["Unum_VB_Broker"]
+    a.UnumGrpBroker = row["Unum_Grp_Broker"]
+    a.UnumIDIBroker = row["Unum_IDI_Broker"]	
+    a.UnumILTCBroker = row["Unum_ILTC_Broker"]
+    a.UnumGLTCBroker = row["Unum_GLTC_Broker"]
+    
     a.unumPortfolio()
     a.judyPortfolio()
     a.allPortfolio()
