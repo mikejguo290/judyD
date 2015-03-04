@@ -28,6 +28,17 @@ class businessRecord(object):
         self.Prod2 = None
         self.Prod3 = None
         self.Prod4 = None
+        self.Broker1= None
+        self.Broker2= None
+        self.Broker3= None
+        self.Broker4= None
+        self.UnumCustomer = None
+        self.UnumVBBroker = None
+        self.UnumGrpBroker = None
+        self.UnumIDIBroker = None	
+        self.UnumILTCBroker = None
+        self.UnumGLTCBroker = None
+        
         self.UnumProds = None
         self.JudyProds =None
         self.AllProds =None
@@ -86,6 +97,9 @@ for compDuns, comp in s.items():
         
         if len(comp.AllProds)>0:
             print comp.AllProds
+            #print "the brokers are %s, %s, %s and %s." % (comp.Broker1, comp.Broker2, comp.Broker3, comp.Broker4)
+            #print "the brokers are %s, %s, %s, %s and %s." % (comp.UnumVBBroker, comp.UnumGrpBroker, comp.UnumIDIBroker, comp.UnumILTCBroker, comp.UnumGLTCBroker)
+            
         #print list(comp.AllProds)[0], type( list(comp.AllProds)[0])
         #print comp.AllProds
         #print comp.AllProds
