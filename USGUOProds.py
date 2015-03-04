@@ -65,7 +65,8 @@ class businessRecord(object):
             else:
                 newWordsList.append("All Other Products")
                 i+=3
-        self.AllProds = newWordsList
+        self.AllProds = sorted( newWordsList )
+        # terrible bodge. if i add sorted on allPortfolio, then call recombineWords, weird stuff happens
                 
 
 GUOs ={}
