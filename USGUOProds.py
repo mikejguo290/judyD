@@ -78,7 +78,18 @@ class businessRecord(object):
                 i+=3
         self.AllProds = sorted( newWordsList )
         # terrible bodge. if i add sorted on allPortfolio, then call recombineWords, weird stuff happens
+    def keyUKBroker(self):
+        forbiddenList =["aon", "gallagher",'lockton','jlt','jardine lloyd thompson','towers watson']
+        compBrokers = [self.Broker1,self.Broker2,self.Broker3,self.Broker4,self.UnumCustomer,self.UnumVBBroker,self.UnumGrpBroker,self.UnumIDIBroker,self.UnumILTCBroker,self.UnumGLTCBroker]
+    
+        flag = False     
+        for forbiddenBroker in forbiddenList:
+            for broker in compBrokers:
+                if forbiddenBroker in (broker.lower()):
+                    flag = True
+        return flag
                 
+    
 
 GUOs ={}
 
@@ -86,7 +97,7 @@ for key,item in s.items():
     if item.GUODuns not in GUOs:
         GUOs[str(item.GUODuns)] = set()
 print GUOs
-
+#quick lookup in dicc for GUOs
 
 for compDuns, comp in s.items():
     if str(comp.GUODuns) in GUOs:
@@ -95,8 +106,8 @@ for compDuns, comp in s.items():
         comp.allPortfolio()
         comp.recombineWords()
         
-        if len(comp.AllProds)>0:
-            print comp.AllProds
+        if len(comp.AllProds)>0 and (not(comp.keyUKBroker())): 
+            print comp.Duns, comp.GUODuns, sorted(comp.AllProds)
             #print "the brokers are %s, %s, %s and %s." % (comp.Broker1, comp.Broker2, comp.Broker3, comp.Broker4)
             #print "the brokers are %s, %s, %s, %s and %s." % (comp.UnumVBBroker, comp.UnumGrpBroker, comp.UnumIDIBroker, comp.UnumILTCBroker, comp.UnumGLTCBroker)
             
@@ -104,6 +115,36 @@ for compDuns, comp in s.items():
         #print comp.AllProds
         #print comp.AllProds
         #GUOs[str(comp.GUODuns)].update(comp.AllProds)
+
+
+def prodInGroup(s, product):
+    """
+    Shows how many GUOs exist in a particular group.
+    """
+    prodDist = {}
+    for key,item in s.items():
+        
+        if product in item.AllProds and not item.keyUKBroker():
+            prodDist[str(item.GUODuns)]=prodDist.get(str(item.GUODuns),0) + 1
+    return prodDist
+
+def compInGroup(s):
+    """
+    Shows how many GUOs exist in a particular group.
+    """
+    compDist = {}
+    for key,item in s.items():
+        compDist[str(item.GUODuns)]=compDist.get(str(item.GUODuns),0)  + 1
+        #compDist[str(item.GUODuns)]=compDist.get(str(item.GUODuns),[])  + [item]
+    return compDist
+
+
+print "GIP in GUOS", prodInGroup(s, "LTD")
+#print "Life in GUOS",prodInGroup(s, "Life")
+
+#print compInGroup(s)
+
+
 
         
 s.close()
