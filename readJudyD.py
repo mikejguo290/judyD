@@ -61,8 +61,20 @@ class businessRecord(object):
         a = [value for value in a if ( not (isinstance(value, float)) and value != '')]
         self.AllProds = a
         
+    def keyUKBroker(self):
+        forbiddenList =["aon", "gallagher",'lockton','jlt','jardine lloyd thompson','towers watson']
+        compBrokers = [self.Broker1,self.Broker2,self.Broker3,self.Broker4,self.UnumCustomer,self.UnumVBBroker,self.UnumGrpBroker,self.UnumIDIBroker,self.UnumILTCBroker,self.UnumGLTCBroker]
+    
+        flag = False     
+        for forbiddenBroker in forbiddenList:
+            for broker in compBrokers:
+                if forbiddenBroker in (broker.lower()):
+                    flag = True
+        return flag
+                
+        
 def readAllComp(tabName):
-    filLocation = r"E:\Marketing Insight And Analysis\Analysis - Internal\Broker Packs\Mercer\20150109 -US owned startups in UK\Archive\Mercer GUOs List input 2.xlsx"
+    filLocation = r"E:\Marketing Insight And Analysis\Analysis - Internal\Broker Packs\Mercer\20150109 -US owned startups in UK\US GUO Duns Output CJ v2.xlsx"
     data_df =read_excel(filLocation,tabName)
     return data_df
 
