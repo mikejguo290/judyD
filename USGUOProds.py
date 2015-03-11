@@ -4,6 +4,7 @@ import StringIO
 import os
 from datetime import datetime
 import xlrd
+import xlwt
 import pandas as pd
 from pandas import DataFrame, read_excel
 import shelve
@@ -115,11 +116,54 @@ for compDuns, comp in s.items():
         #print comp.AllProds
         #print comp.AllProds
         #GUOs[str(comp.GUODuns)].update(comp.AllProds)
+def GUOProducts(s):
+    GUOProd ={}
+    for compDuns, comp in s.items():
+        comp.unumPortfolio()
+        comp.judyPortfolio()
+        comp.allPortfolio()
+        comp.recombineWords()
+        
+        if len(comp.AllProds)>0 and not(comp.keyUKBroker()):
+            
+            GUOProd[str(comp.GUODuns)] = GUOProd.get(str(comp.GUODuns),[])+(comp.AllProds)
 
+    NewGUOProd ={}
+    for key, item in GUOProd.items():
+        NewGUOProd[key]=", ".join( sorted(list(set(item)),reverse=True) ) #have to convert the list to string, can't print it out otherwise. 
+    return NewGUOProd
+
+def UnumProducts(s):
+    Prod ={}
+    for compDuns, comp in s.items():
+        comp.unumPortfolio()
+        UnumProds=[value.encode('utf-8') for value in comp.UnumProds if ( not (isinstance(value, float)) and value != '')]
+        if len(UnumProds)>0 and not(comp.keyUKBroker()):
+            
+            Prod[str(comp.GUODuns)] = Prod.get(str(comp.GUODuns),[])+ list(UnumProds)
+
+    NewProd ={}
+    for key, item in Prod.items():
+        NewProd[key]=", ".join(  sorted(list(set(item)),reverse=True) ) #have to convert the list to string, can't print it out otherwise. 
+    return NewProd
+
+def BrokerProducts(s):
+    Prod ={}
+    for compDuns, comp in s.items():
+        comp.unumPortfolio()
+        UnumProds=[value.encode('utf-8') for value in comp.UnumProds if ( not (isinstance(value, float)) and value != '')]
+        if len(UnumProds)>0 and not(comp.keyUKBroker()):
+            
+            Prod[str(comp.GUODuns)] = Prod.get(str(comp.GUODuns),[])+ list(UnumProds)
+
+    NewProd ={}
+    for key, item in Prod.items():
+        NewProd[key]=", ".join(  sorted(list(set(item)),reverse=True) ) #have to convert the list to string, can't print it out otherwise. 
+    return NewProd
 
 def prodInGroup(s, product):
     """
-    Shows how many GUOs exist in a particular group.
+    Shows how many subs hold a certain product in a particular group.
     """
     prodDist = {}
     for key,item in s.items():
@@ -130,7 +174,7 @@ def prodInGroup(s, product):
 
 def compInGroup(s):
     """
-    Shows how many GUOs exist in a particular group.
+    Shows how many subs exist under a GUO.
     """
     compDist = {}
     for key,item in s.items():
@@ -139,14 +183,30 @@ def compInGroup(s):
     return compDist
 
 
-print "GIP in GUOS", prodInGroup(s, "LTD")
+#print "GIP in GUOS", prodInGroup(s, "LTD")
 #print "Life in GUOS",prodInGroup(s, "Life")
 
 #print compInGroup(s)
 
-
-
+def outputToExcel(array,filename):
+    workbook = xlwt.Workbook()
+    sheet = workbook.add_sheet('data',cell_overwrite_ok=True)
+    row = 0
+    sheet.write(row,0,'GUO')
+    sheet.write(row,1,'Products')
+    row = 1
+    for key, val in array.items():
+        sheet.write(row,0,key)#names.decode('utf-8')
+        sheet.write(row,1,val)#matched name
+        row+=1
         
+    workbook.save('%s.xls'% filename)
+    print "OUTPUT CREATED!"
+
+#outputToExcel(prodInGroup(s, 'Life'),"subsidiaries with GLIF")
+#outputToExcel(prodInGroup(s, 'LTD'),"subsidiaries with GIP")
+#outputToExcel(GUOProducts(s),"Products in Group")
+outputToExcel(UnumProducts(s),"Unum Products in Group")
 s.close()
 
 """
