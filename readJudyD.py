@@ -71,7 +71,14 @@ class businessRecord(object):
                 if forbiddenBroker in (broker.lower()):
                     flag = True
         return flag
-                
+    def intermediatedBy(self, inputBroker):
+        brokerDesired = inputBroker.lower()
+        brokerList =[self.Broker1,self.Broker2,self.Broker3,self.Broker4,self.UnumCustomer,self.UnumVBBroker,self.UnumGrpBroker,self.UnumIDIBroker,self.UnumILTCBroker,self.UnumGLTCBroker]
+        flag = False     
+        for broker in brokerList:
+            if brokerDesired in broker.lower():
+                flag = True
+        return flag
         
 def readAllComp(tabName):
     filLocation = r"E:\Marketing Insight And Analysis\Analysis - Internal\Broker Packs\Mercer\20150109 -US owned startups in UK\US GUO Duns Output CJ v2.xlsx"
