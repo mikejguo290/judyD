@@ -89,6 +89,15 @@ class businessRecord(object):
                 if forbiddenBroker in (broker.lower()):
                     flag = True
         return flag
+        
+    def intermediatedBy(self, inputBroker):
+        brokerDesired = inputBroker.lower()
+        brokerList =[self.Broker1,self.Broker2,self.Broker3,self.Broker4,self.UnumCustomer,self.UnumVBBroker,self.UnumGrpBroker,self.UnumIDIBroker,self.UnumILTCBroker,self.UnumGLTCBroker]
+        flag = False     
+        for broker in brokerList:
+            if brokerDesired in broker.lower():
+                flag = True
+        return flag
                 
     
 
@@ -150,11 +159,11 @@ def UnumProducts(s):
 def BrokerProducts(s):
     Prod ={}
     for compDuns, comp in s.items():
-        comp.unumPortfolio()
-        UnumProds=[value.encode('utf-8') for value in comp.UnumProds if ( not (isinstance(value, float)) and value != '')]
-        if len(UnumProds)>0 and not(comp.keyUKBroker()):
+        comp.judyPortolio()
+        judyProds=[value.encode('utf-8') for value in comp.judyProds if ( not (isinstance(value, float)) and value != '')]
+        if len(judyProds)>0 and not(comp.keyUKBroker()):
             
-            Prod[str(comp.GUODuns)] = Prod.get(str(comp.GUODuns),[])+ list(UnumProds)
+            Prod[str(comp.GUODuns)] = Prod.get(str(comp.GUODuns),[])+ list(judyProds)
 
     NewProd ={}
     for key, item in Prod.items():
@@ -181,7 +190,19 @@ def compInGroup(s):
         compDist[str(item.GUODuns)]=compDist.get(str(item.GUODuns),0)  + 1
         #compDist[str(item.GUODuns)]=compDist.get(str(item.GUODuns),[])  + [item]
     return compDist
-
+    
+def USBroker(s, inputBroker):
+   
+    Prod ={}
+    for compDuns, comp in s.items():
+        comp.allPortfolio()
+        UnumProds=[value.encode('utf-8') for value in comp.UnumProds if ( not (isinstance(value, float)) and value != '')]
+        if comp.intermediatedBy('willis') and not comp.keyUKBroker() :
+            Prod[str(comp.GUODuns)] = Prod.get(str(comp.GUODuns),[])+ list(UnumProds)
+    NewProd ={}
+    for key, item in Prod.items():
+        NewProd[key]=", ".join(  sorted(list(set(item)),reverse=True) ) #have to convert the list to string, can't print it out otherwise. 
+    return NewProd
 
 #print "GIP in GUOS", prodInGroup(s, "LTD")
 #print "Life in GUOS",prodInGroup(s, "Life")
